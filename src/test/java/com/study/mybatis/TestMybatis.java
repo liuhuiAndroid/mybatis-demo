@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.io.InputStream;
 
 /**
- * Unit test for simple App.
+ * Unit test for mybatis.
  */
 public class TestMybatis {
 
@@ -20,11 +20,19 @@ public class TestMybatis {
     public void testMapper() throws Exception {
         String resource = "mybatis-config.xml";
         InputStream in = Resources.getResourceAsStream(resource);
+        // 加载mybatis-config.xml配置文件，并创建SqlSessionFactory对象
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(in);
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        User user = userMapper.findUserById(10);
-        System.out.println(user);
+        // 创建SqlSession对象
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            User user = userMapper.findUserById(10);
+            System.out.println(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
 }
